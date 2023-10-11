@@ -1,23 +1,23 @@
 def Main():
     print("User is X")
     print("Computer is O")
-    userWins = 0
-    computerWins = 0
-    catGames = 0
+    user_wins = 0
+    computer_wins = 0
+    cat_games = 0
     thingy = 0
-    playAgain = "yes"
-    while playAgain.lower().strip() == "yes":
+    play_again = "yes"
+    while play_again.lower().strip() == "yes":
         thingy = playGame()
         if thingy == 1:
-            userWins+=1
+            user_wins+=1
         elif thingy == 2:
-            computerWins+=1
+            computer_wins+=1
         elif thingy == 3:
-            catGames +=1
-        print(f"\nUser Wins: {userWins}")
-        print("Computer Wins:",computerWins)
-        print("Cat games:",catGames,"\n")
-        playAgain = input("Would you like to play again? ")
+            cat_games +=1
+        print(f"\nUser Wins: {user_wins}")
+        print("Computer Wins:",computer_wins)
+        print("Cat games:",cat_games,"\n")
+        play_again = input("Would you like to play again? ")
         print("")
 def playGame():
     board = ["1","2","3","4","5","6","7","8","9"]
