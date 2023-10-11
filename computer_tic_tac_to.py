@@ -7,7 +7,7 @@ def Main():
     thingy = 0
     play_again = "yes"
     while play_again.lower().strip() == "yes":
-        thingy = playGame()
+        thingy = play_game()
         if thingy == 1:
             user_wins+=1
         elif thingy == 2:
@@ -19,48 +19,48 @@ def Main():
         print("Cat games:",cat_games,"\n")
         play_again = input("Would you like to play again? ")
         print("")
-def playGame():
+def play_game():
     board = ["1","2","3","4","5","6","7","8","9"]
     answer = input("Would you like to go first? ")
-    numTurn = 1
+    num_turn = 1
     if answer == "yes":
         turn = 1
     else:
         turn = 2
-    while checkWin(board) == 0:
+    while check_win(board) == 0:
         if turn == 1:
-            playerTurn(board)
+            player_turn(board)
         else:
-            computerTurn(board,numTurn)
-        if checkWin(board) == 1:
+            computer_turn(board,num_turn)
+        if check_win(board) == 1:
             print("\nUser wins!\n")
-            printBoard(board)
+            print_board(board)
             return 1
-        elif checkWin(board) == 2:
+        elif check_win(board) == 2:
             print("\nComputer Wins!\n")
-            printBoard(board)
+            print_board(board)
             return 2
-        elif checkWin(board) == 3:
+        elif check_win(board) == 3:
             print("\nCat game :(\n")
-            printBoard(board)
+            print_board(board)
             return 3
         if turn == 1:
             turn +=1
         else:
             turn -=1
-        numTurn +=1
-def computerTurn(board,numTurn):
-    if numTurn == 1:
+        num_turn +=1
+def computer_turn(board,num_turn):
+    if num_turn == 1:
         board[0] = "O"
-    elif numTurn == 3:
+    elif num_turn == 3:
         if board[1] == "X" or board[5] == "X" or board[8] == "X":
             board[6] = "O"
         elif board[3] == "X" or board[7] == "X":
             board[2] = "O"
         elif board[6] == "X" or board [2] == "X" or board[4] == "X":
             board[8] = "O"
-    elif numTurn == 5:
-        pzazz = checkPossibleWin(board)
+    elif num_turn == 5:
+        pzazz = check_possible_win(board)
         if pzazz != -1:
             board[pzazz] = "O"
         elif board[6] == "O":
@@ -70,8 +70,8 @@ def computerTurn(board,numTurn):
                 board[2] = "O"
         elif board[2] == "O":
             board[8] = "O"
-    elif numTurn >= 6:
-        pzazz = checkPossibleWin(board)
+    elif num_turn >= 6:
+        pzazz = check_possible_win(board)
         if pzazz != -1:
             board[pzazz] = "O"
         else:
@@ -80,13 +80,13 @@ def computerTurn(board,numTurn):
                     board[a] = "O"
                     break
                 
-    elif numTurn == 2:
+    elif num_turn == 2:
         if board[4] == "X":
             board[0] = "O"
         else:
             board[4] = "O"
-    elif numTurn == 4:
-        pzazz = checkPossibleWin(board)
+    elif num_turn == 4:
+        pzazz = check_possible_win(board)
         if pzazz != -1:
             board[pzazz] = "O"
         # 2 corners
@@ -118,132 +118,132 @@ def computerTurn(board,numTurn):
                 board[6] = "O"
             elif board[2] == "X":
                 board[8] = "O"
-def checkPossibleWin(board):
-    countO = 0
-    countX = 0
+def check_possible_win(board):
+    count_O = 0
+    count_X = 0
     #checks horizontals
     for k in range(3):
         for i in range(3):
             if board[k*3 + i] == "X":
-                countX +=1
+                count_X +=1
             elif board[k*3 + i] == "O":
-                countO +=1
-        if ((countO == 2 and countX == 0) or (countO == 0 and countX == 2)):
+                count_O +=1
+        if ((count_O == 2 and count_X == 0) or (count_O == 0 and count_X == 2)):
             for j in range(3):
                 if board[k*3 + j] != "X" and board[k*3 + j] != "O":
-                    if countO == 2:
+                    if count_O == 2:
                         return k*3 + j
-        countO = 0
-        countX = 0
+        count_O = 0
+        count_X = 0
     # checks verticals
     for i in range(3):
         for j in range(3):
             if board[j*3 + i] == "X":
-                countX +=1
+                count_X +=1
             elif board[j*3 + i] == "O":
-                countO +=1
-        if ((countO == 2 and countX == 0) or (countO == 0 and countX == 2)):
+                count_O +=1
+        if ((count_O == 2 and count_X == 0) or (count_O == 0 and count_X == 2)):
             for k in range(3):
                 if board[k*3 + i] != "X" and board[k*3 + i] != "O":
-                    if countO == 2:    
+                    if count_O == 2:    
                         return k*3 + i
-        countO = 0
-        countX = 0
+        count_O = 0
+        count_X = 0
     # check l to r diagnal
     for i in [0,4,8]:
         if board[i] == "X":
-            countX +=1
+            count_X +=1
         elif board[i] == "O":
-            countO +=1
-    if ((countO == 2 and countX == 0) or (countO == 0 and countX == 2)):
+            count_O +=1
+    if ((count_O == 2 and count_X == 0) or (count_O == 0 and count_X == 2)):
         for i in [0,4,8]:
             if board[i] != "X" and board[i] != "O":
-                if countO == 2:    
+                if count_O == 2:    
                     return i
-    countO = 0
-    countX = 0
+    count_O = 0
+    count_X = 0
     #check r to l diagnal
     for i in [2,4,6]:
         if board[i] == "X":
-            countX +=1
+            count_X +=1
         elif board[i] == "O":
-            countO +=1
-    if ((countO == 2 and countX == 0) or (countO == 0 and countX == 2)):
+            count_O +=1
+    if ((count_O == 2 and count_X == 0) or (count_O == 0 and count_X == 2)):
         for i in [2,4,6]:
             if board[i] != "X" and board[i] != "O":
-                if countO == 2:
+                if count_O == 2:
                     return i
-    countO = 0
-    countX = 0
+    count_O = 0
+    count_X = 0
     #    START OF CHECKING FOR X
     #checks horizontals
     for k in range(3):
         for i in range(3):
             if board[k*3 + i] == "X":
-                countX +=1
+                count_X +=1
             elif board[k*3 + i] == "O":
-                countO +=1
-        if ((countO == 2 and countX == 0) or (countO == 0 and countX == 2)):
+                count_O +=1
+        if ((count_O == 2 and count_X == 0) or (count_O == 0 and count_X == 2)):
             for j in range(3):
                 if board[k*3 + j] != "X" and board[k*3 + j] != "O":
-                    if countX == 2:
+                    if count_X == 2:
                         return k*3 + j
-        countO = 0
-        countX = 0
+        count_O = 0
+        count_X = 0
     # checks verticals
     for i in range(3):
         for j in range(3):
             if board[j*3 + i] == "X":
-                countX +=1
+                count_X +=1
             elif board[j*3 + i] == "O":
-                countO +=1
-        if ((countO == 2 and countX == 0) or (countO == 0 and countX == 2)):
+                count_O +=1
+        if ((count_O == 2 and count_X == 0) or (count_O == 0 and count_X == 2)):
             for k in range(3):
                 if board[k*3 + i] != "X" and board[k*3 + i] != "O":
-                    if countX == 2:    
+                    if count_X == 2:    
                         return k*3 + i
-        countO = 0
-        countX = 0
+        count_O = 0
+        count_X = 0
     # check l to r diagnal
     for i in [0,4,8]:
         if board[i] == "X":
-            countX +=1
+            count_X +=1
         elif board[i] == "O":
-            countO +=1
-    if ((countO == 2 and countX == 0) or (countO == 0 and countX == 2)):
+            count_O +=1
+    if ((count_O == 2 and count_X == 0) or (count_O == 0 and count_X == 2)):
         for i in [0,4,8]:
             if board[i] != "X" and board[i] != "O":
-                if countX == 2:    
+                if count_X == 2:    
                     return i
-    countO = 0
-    countX = 0
+    count_O = 0
+    count_X = 0
     #check r to l diagnal
     for i in [2,4,6]:
         if board[i] == "X":
-            countX +=1
+            count_X +=1
         elif board[i] == "O":
-            countO +=1
-    if ((countO == 2 and countX == 0) or (countO == 0 and countX == 2)):
+            count_O +=1
+    if ((count_O == 2 and count_X == 0) or (count_O == 0 and count_X == 2)):
         for i in [2,4,6]:
             if board[i] != "X" and board[i] != "O":
-                if countX == 2:
+                if count_X == 2:
                     return i
-    countO = 0
-    countX = 0
+    count_O = 0
+    count_X = 0
     return -1
-def playerTurn(board):
+def player_turn(board):
     print("")
-    printBoard(board)
+    print_board(board)
     print("")
-    userChoice = int(input("Type 1-9 to indicate where to go "))
-    while userChoice < 0 or userChoice > 9 or board[userChoice - 1] == "X" or board[userChoice - 1] == "O":
-        if userChoice < 0 or userChoice > 9:
-            userChoice = int(input("invalid response, please enter a number 1=9 "))
+    user_choice = int(input("Type 1-9 to indicate where to go "))
+    while user_choice < 0 or user_choice > 9 or board[user_choice - 1] == "X" or board[user_choice - 1] == "O":
+        if user_choice < 0 or user_choice > 9:
+            user_choice = int(input("invalid response, please enter a number 1=9 "))
         else:
-            userChoice = int(input("Invalid response, spot already taken, please pick another spot "))
-    board[userChoice - 1] = "X"
+            user_choice = int(input("Invalid response, spot already taken, please pick another spot "))
+    board[user_choice - 1] = "X"
     return board
-def checkWin(board):
+def check_win(board):
     for i in range(3):
         if board[i*3] == board[i*3+1] and board[i*3+1] == board[i*3+2]:
             if board[i*3] == "X":
@@ -274,7 +274,7 @@ def checkWin(board):
     if counter == 9:
         return 3
     return 0
-def printBoard(board):
+def print_board(board):
     for i in range(3):
         for j in range(3):
             print(board[(i*3 + j)], end=" ")
