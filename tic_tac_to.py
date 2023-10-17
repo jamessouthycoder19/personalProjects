@@ -92,4 +92,5 @@ def player_board(board):
         for j in range(3):
             print(board[(i*3 + j)], end=" ")
         print("")
-Main()
+if __name__ == "__main__":
+    Main()
