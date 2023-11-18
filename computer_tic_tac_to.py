@@ -19,6 +19,7 @@ def Main():
         print("Cat games:",cat_games,"\n")
         play_again = input("Would you like to play again? ")
         print("")
+
 def play_game():
     board = ["1","2","3","4","5","6","7","8","9"]
     answer = input("Would you like to go first? ")
@@ -49,6 +50,7 @@ def play_game():
         else:
             turn -=1
         num_turn +=1
+        
 def computer_turn(board,num_turn):
     if num_turn == 1:
         board[0] = "O"
@@ -121,6 +123,7 @@ def computer_turn(board,num_turn):
 def check_possible_win(board):
     count_O = 0
     count_X = 0
+
     #checks horizontals
     for k in range(3):
         for i in range(3):
@@ -135,6 +138,7 @@ def check_possible_win(board):
                         return k*3 + j
         count_O = 0
         count_X = 0
+
     # checks verticals
     for i in range(3):
         for j in range(3):
@@ -149,6 +153,7 @@ def check_possible_win(board):
                         return k*3 + i
         count_O = 0
         count_X = 0
+
     # check l to r diagnal
     for i in [0,4,8]:
         if board[i] == "X":
@@ -162,6 +167,7 @@ def check_possible_win(board):
                     return i
     count_O = 0
     count_X = 0
+
     #check r to l diagnal
     for i in [2,4,6]:
         if board[i] == "X":
@@ -175,6 +181,7 @@ def check_possible_win(board):
                     return i
     count_O = 0
     count_X = 0
+
     #    START OF CHECKING FOR X
     #checks horizontals
     for k in range(3):
@@ -190,6 +197,7 @@ def check_possible_win(board):
                         return k*3 + j
         count_O = 0
         count_X = 0
+
     # checks verticals
     for i in range(3):
         for j in range(3):
@@ -204,6 +212,7 @@ def check_possible_win(board):
                         return k*3 + i
         count_O = 0
         count_X = 0
+
     # check l to r diagnal
     for i in [0,4,8]:
         if board[i] == "X":
@@ -217,6 +226,7 @@ def check_possible_win(board):
                     return i
     count_O = 0
     count_X = 0
+
     #check r to l diagnal
     for i in [2,4,6]:
         if board[i] == "X":
@@ -231,6 +241,7 @@ def check_possible_win(board):
     count_O = 0
     count_X = 0
     return -1
+
 def player_turn(board):
     print("")
     print_board(board)
@@ -243,6 +254,7 @@ def player_turn(board):
             user_choice = int(input("Invalid response, spot already taken, please pick another spot "))
     board[user_choice - 1] = "X"
     return board
+
 def check_win(board):
     for i in range(3):
         if board[i*3] == board[i*3+1] and board[i*3+1] == board[i*3+2]:
@@ -255,6 +267,7 @@ def check_win(board):
                 return 1
             else:
                 return 2
+            
     #diagnals
     if board[0] == board[4] and board[4] == board[8]:
         if board[0] == "X":
@@ -274,6 +287,7 @@ def check_win(board):
     if counter == 9:
         return 3
     return 0
+
 def print_board(board):
     for i in range(3):
         for j in range(3):

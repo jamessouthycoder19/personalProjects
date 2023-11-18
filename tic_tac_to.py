@@ -15,6 +15,7 @@ def Main():
         print("Player Two wins:",player_two_wins,"\n")
         play_again = input("Would you like to play again? ")
         print("")
+
 def play_game():
     board = ["1","2","3","4","5","6","7","8","9"]
     turn = int(input("Who will be playing first? (1 or 2) "))
@@ -41,6 +42,7 @@ def play_game():
             turn +=1
         else:
             turn -=1
+
 def player_turn(who,board):
     print("")
     player_board(board)
@@ -56,6 +58,7 @@ def player_turn(who,board):
     else:
         board[user_choice - 1] = "O"
     return board
+
 def check_win(board):
     for i in range(3):
         if board[i*3] == board[i*3+1] and board[i*3+1] == board[i*3+2]:
@@ -68,6 +71,7 @@ def check_win(board):
                 return 1
             else:
                 return 2
+            
     #diagnals
     if board[0] == board[4] and board[4] == board[8]:
         if board[0] == "X":
@@ -87,10 +91,12 @@ def check_win(board):
     if counter == 9:
         return 3
     return 0
+
 def player_board(board):
     for i in range(3):
         for j in range(3):
             print(board[(i*3 + j)], end=" ")
         print("")
+        
 if __name__ == "__main__":
     Main()
