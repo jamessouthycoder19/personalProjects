@@ -15,7 +15,15 @@ def check_win(board):
         for j in range(4):
             if board[i][j] == board[i][j+1] and board[i][j+1] == board[i][j+2] and board[i][j+2] == board[i][j+3] and board[i][j] != "-":
                 return True
-    # diagnols
+    # diagnals
+    for i in range(3):
+        for j in range(6):
+            if(j<=3):
+                if(board[i][j] == board[i+1][j+1] and board[i+1][j+1] == board[i+2][j+2] and board[i+2][j+2] == board[i+3][j+3] and board[i][j] != "-"):
+                    return True
+            if(j>=3):
+                if(board[i][j] == board[i+1][j-1] and board[i+1][j-1] == board[i+2][j-2] and board[i+2][j-2] == board[i+3][j-3] and board[i][j] != "-"):
+                    return True
 
 def turn(board, player_turn):
     print_board(board)
@@ -45,6 +53,7 @@ def main():
         while not has_won:
             turn(board, player_turn)
             if check_win(board):
+                print_board(board)
                 if player_turn == 1:
                     print("Player 1 wins!")
                     player_one_wins += 1
