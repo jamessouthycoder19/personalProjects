@@ -176,6 +176,24 @@ public abstract class TicTacTo {
         }
         return false;
     }
+    /**
+     * Check's for a cat game (draw)
+     * @return true if the game is a cat game, false if not.
+     */
+    public boolean checkCatGame(){
+        int count = 0;
+        for(String[] row : board){
+            for(String spot : row){
+                if(!spot.equals("-")){
+                    count++;
+                }
+            }
+        }
+        if(count == 9){
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Sends a chosen spot to the other player. 

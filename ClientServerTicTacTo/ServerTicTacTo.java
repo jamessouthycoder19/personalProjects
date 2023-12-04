@@ -23,7 +23,22 @@ public class ServerTicTacTo extends TicTacTo{
      * has won or a draw occurs. 
      */
     public void playGame() throws IOException{
+        /**
+         * Prints a board shown below for user ease of use.
+         * 1 2 3
+         * 4 5 6
+         * 7 8 9
+         */
+        for(int i = 0;i<3;i++){
+            for(int j = 1;j<4;j++){
+                System.out.print(i*3+j + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+        //Prints the board.
         printBoard();
+        //While loop that plays the game.
         while(!gameOver){
             System.out.println();
             System.out.println("Opponent's move:");
@@ -31,8 +46,11 @@ public class ServerTicTacTo extends TicTacTo{
             printBoard();
             System.out.println();
             if(checkWin()){
-                gameOver = true;
                 System.out.println("You have lost :(");
+                break;
+            }
+            if(checkCatGame()){
+                System.out.println("Cat game :(");
                 break;
             }
             myTurn();
