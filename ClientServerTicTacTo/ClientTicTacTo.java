@@ -3,12 +3,26 @@ package ClientServerTicTacTo;
 import java.io.IOException;
 
 public class ClientTicTacTo extends TicTacTo{
+    /**
+     * Stays false untill the game is over, then is changed to true
+     * so that the while loop in playGame() ends. 
+     */
     private boolean gameOver = false;
 
+    /**
+     * Constructor to create client side of tic tac to game.
+     * @param host host name for connection, in this game localhost.
+     * @param port port number for connection, in this game 1738.
+     * @throws IOException Takes care of all IOExceptions
+     */
     public ClientTicTacTo(String host,int port) throws IOException{
         super(host,port,"O");
     }
 
+    /**
+     * Uses a while loop to play the game, exits once one of the two players
+     * has won or a draw occurs. 
+     */
     public void playGame() throws IOException{
         printBoard();
         while(!gameOver){
