@@ -5,7 +5,7 @@ import java.io.IOException;
 public class ClientTicTacTo extends TicTacTo{
 
     public ClientTicTacTo(String host,int port) throws IOException{
-        super(host,port);
+        super(host,port,"O");
     }
 
     public static void main(String[] args) throws IOException{
