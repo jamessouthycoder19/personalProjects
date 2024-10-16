@@ -1,0 +1,11 @@
+{
+  "": {
+    "swift-dependencies": "C:\\Users\\James\\personalProjects\\swift\\.build\\x86_64-unknown-windows-msvc\\debug\\ticTacToe.build\\master.swiftdeps"
+  },
+  "C:\\Users\\James\\personalProjects\\swift\\Sources\\ticTacToe\\main.swift": {
+    "dependencies": "C:\\Users\\James\\personalProjects\\swift\\.build\\x86_64-unknown-windows-msvc\\debug\\ticTacToe.build\\main.d",
+    "object": "C:\\Users\\James\\personalProjects\\swift\\.build\\x86_64-unknown-windows-msvc\\debug\\ticTacToe.build\\main.swift.o",
+    "swiftmodule": "C:\\Users\\James\\personalProjects\\swift\\.build\\x86_64-unknown-windows-msvc\\debug\\ticTacToe.build\\main~partial.swiftmodule",
+    "swift-dependencies": "C:\\Users\\James\\personalProjects\\swift\\.build\\x86_64-unknown-windows-msvc\\debug\\ticTacToe.build\\main.swiftdeps"
+  }
+}
