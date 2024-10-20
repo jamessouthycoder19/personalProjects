@@ -1,4 +1,5 @@
 // This project is me teaching myself how to learn some basic Swift
+import Foundation
 
 func printBoard(board: Array<Array<String>>) {
     // Print the board for the user to see
@@ -15,7 +16,7 @@ func takeTurn(player: Int, board: Array<Array<String>>) -> Array<Array<String>>{
     var newBoard = board
     var sentinel: Bool = true
     while(sentinel){
-    //Ask the user to select a number
+    // Ask the user to select a number
         print("Player \(player) Select a spot 1-9: ")
         if let choice = readLine(), var number = Int(choice) {
             number = number - 1
@@ -40,8 +41,8 @@ func takeTurn(player: Int, board: Array<Array<String>>) -> Array<Array<String>>{
 func checkWinOptimized(board: Array<Array<String>>) -> Bool{
     /**
     This is potentially optimized to just a brute force solve (i.e. checking all 8 possible win conditions).
-    I plan to implement both, and then do time comparisons to actually see if one is more optimal
-    Even if this isn't actually optimal, it was cool to see how sets/dictionaries worked in swift
+
+    As it turns out, this way isn't actually optimal, compared to both a brute force, and an in between version.
 
     To optimize checking if a user has one, imagine all of the spots on the board layed out like this
     1 2 3                     Win condition (1,2,3) = A
@@ -79,6 +80,8 @@ func checkWinOptimized(board: Array<Array<String>>) -> Bool{
 }
 
 func checkWinBruteForce(board: Array<Array<String>>) -> Bool{
+    // This just checks all 8 possible win conditions, one by one
+
     let board: Array<Array<String>> = board
     // This Function will just go through all 8 possible win scenarios to determine if there is a winner
     if board[0][0] == board[0][1] && board[0][1] == board[0][2] && board[0][0] != "-" {
@@ -132,6 +135,9 @@ func checkWinHalfOptimized(board: Array<Array<String>>) -> Bool{
     // 1 2 3
     // 4 5 6         If any of these squares are not empty (not equal to '-')
     // 7 8 9         then win conditions associated with that square are checked
+
+    // This way of checking is actually the most optimal, compared to both the brute force,
+    // and over optimized algorithms
 
     if board[0][1] != "-" {
         if board[0][0] == board[0][1] && board[0][1] == board[0][2] {
@@ -197,42 +203,183 @@ func checkWinHalfOptimized(board: Array<Array<String>>) -> Bool{
     
 }
 
-// Let user know how to make their selection
-print("\nEnter you selection in the following manner\n")
-print("1 | 2 | 3")
-print("--|---|--")
-print("4 | 5 | 6")
-print("--|---|--")
-print("7 | 8 | 9\n\n")
+func generateBoards(board: [[String]], row: Int, col: Int) -> [[[String]]] {
+    // Function to build all possible board cases to test time complexity
+    
+    let symbols = ["X", "O", "-"]
 
-// Create Blank board
-var board: [Array] = Array(repeating: Array(repeating: "-", count: 3), count: 3)
-var player: Int = 1
-var numTurns = 0
+    var boards = [[[String]]]()
+    
+    if row == 3 {
+        boards.append(board)
+        return boards
+    }
+    
+    var nextRow = row
+    var nextCol = col + 1
+    if nextCol == 3 {
+        nextRow += 1
+        nextCol = 0
+    }
+    
+    for symbol in symbols {
+        var newBoard = board
+        newBoard[row][col] = symbol
+        boards.append(contentsOf: generateBoards(board: newBoard, row: nextRow, col: nextCol))
+    }
+    
+    return boards
+}
 
-// Loop for the game
-while(true) {
-    // Print current state of board
-    printBoard(board: board)
+func filterBoards(boards: [[[String]]], minMoveCount: Int) -> [[[String]]] {
+    // This function takes the return from generateBoards, and filters it down to only boards
+    // that have at at least n number of moves, where n is the minMoveCount param.
 
-    // take a turn, and replace old board with updated board
-    board = takeTurn(player: player, board: board)
-    numTurns += 1
+    return boards.filter { board in
+        let count = board.flatMap { $0 }.filter { $0 != "" }.count
+        return count >= minMoveCount
+    }
+}
 
-    // Only check if there is a win once 5 turns have been taken,
-    // there are no win conditions that exist before turn 5
-    if numTurns >= 5 {
-        if checkWinHalfOptimized(board: board) {
-            print("Player \(player) Won!")
-            printBoard(board: board)
-            break
-        }
+func testTimeComplexityOfAlgos() -> Array<Int>{
+    // This function will test all 3 win condition functions, to determine the mean time of each of them
+
+    // Generate all possible boards
+    let initialBoard = Array(repeating: Array(repeating: "-", count:  3), count:  3)
+    let allBoards = generateBoards(board: initialBoard, row: 0, col: 0)
+
+    // Filter this down to only boards with 5 or more moves
+    let relevantBoards = filterBoards(boards: allBoards, minMoveCount: 5)
+
+    let numBoards = relevantBoards.count
+    var startTime: DispatchTime
+    var endTime: DispatchTime
+    var differenceInTime: UInt64
+    var miliseconds: Int
+    var totalTime: Int
+    var averageTime: Int
+
+    var returnArray: Array<Int> = [0, 0, 0]
+
+    // Find average time to complete checkWinBruteForce
+    totalTime = 0
+    for board in relevantBoards {
+        startTime = DispatchTime.now()
+        _ = checkWinBruteForce(board: board)
+        endTime = DispatchTime.now()
+        differenceInTime = endTime.uptimeNanoseconds - startTime.uptimeNanoseconds
+        miliseconds = Int(differenceInTime)
+        totalTime += miliseconds
+    }
+    averageTime = totalTime / numBoards
+    returnArray[0] = averageTime
+
+
+    // Find average time to complete checkWinHalfOptimized
+    totalTime = 0
+    for board in relevantBoards {
+        startTime = DispatchTime.now()
+        _ = checkWinHalfOptimized(board: board)
+        endTime = DispatchTime.now()
+        differenceInTime = endTime.uptimeNanoseconds - startTime.uptimeNanoseconds
+        miliseconds = Int(differenceInTime)
+        totalTime += miliseconds
+    }
+    averageTime = totalTime / numBoards
+    returnArray[1] = averageTime
+
+
+    // Find average time to complete checkWinOptimized
+    totalTime = 0
+    for board in relevantBoards {
+        startTime = DispatchTime.now()
+        _ = checkWinOptimized(board: board)
+        endTime = DispatchTime.now()
+        differenceInTime = endTime.uptimeNanoseconds - startTime.uptimeNanoseconds
+        miliseconds = Int(differenceInTime)
+        totalTime += miliseconds
+    }
+    averageTime = totalTime / numBoards
+    returnArray[2] = averageTime
+
+    return returnArray
+    
+}
+
+func testTimeComplexityMultipleTimes(n: Int) {
+    // Due to uncontrollable events, the mean times of the algorithms are not going to be the exact same every time.
+    // To counteract this, we can do multiple tests, and find the man. The more tests we do, the closer the result
+    // will be to the 'true' value
+
+    var totalBruteForceTime: Int = 0
+    var totalHalfOptimizedTime: Int = 0
+    var totalOptimizedTime: Int = 0
+    var returnedArray: Array<Int>
+
+    for _ in 1...n {
+        returnedArray = testTimeComplexityOfAlgos()
+        totalBruteForceTime += returnedArray[0]
+        totalHalfOptimizedTime += returnedArray[1]
+        totalOptimizedTime += returnedArray[2]
     }
 
-    // Switch player for next turn
-    if player == 1 {
-        player = 2
+    print("\nBrute Force Mean Time: \(totalBruteForceTime / n) Nanoseconds")
+    print("Half Optimized Mean Time: \(totalHalfOptimizedTime / n) Nanoseconds")
+    print("Optimized Mean Time: \(totalOptimizedTime / n) Nanoseconds")
+}
+
+func playTicTacToe() {
+    //Let user know how to make their selection
+    print("\nEnter your selection in the following manner\n")
+    print("1 | 2 | 3")
+    print("--|---|--")
+    print("4 | 5 | 6")
+    print("--|---|--")
+    print("7 | 8 | 9\n\n")
+
+    // Create Blank board
+    var board: [Array] = Array(repeating: Array(repeating: "-", count: 3), count: 3)
+    var player: Int = 1
+    var numTurns = 0
+
+    // Loop for the game
+    while(true) {
+        // Print current state of board
+        printBoard(board: board)
+
+        // take a turn, and replace old board with updated board
+        board = takeTurn(player: player, board: board)
+        numTurns += 1
+
+        // Only check if there is a win once 5 turns have been taken,
+        // there are no win conditions that exist before turn 5
+        if numTurns >= 5 {
+            if checkWinHalfOptimized(board: board) {
+                print("Player \(player) Won!")
+                printBoard(board: board)
+                break
+            }
+        }
+
+        // Switch player for next turn
+        if player == 1 {
+            player = 2
+        } else {
+            player = 1
+        }
+    }
+}
+
+print("Would you like to: ")
+print("1. Play Tic-Tac-Toe")
+print("2. See the Difference in Time of Algorithms")
+if let choice = readLine(), var number = Int(choice) {
+    if(number == 1){
+        playTicTacToe()
     } else {
-        player = 1
+        print("\nHow many iterations of the mean would you like to analyze?")
+        if let choice = readLine(), var number = Int(choice) {
+            testTimeComplexityMultipleTimes(n: number)
+        }
     }
 }
