@@ -78,20 +78,158 @@ func checkWinOptimized(board: Array<Array<String>>) -> Bool{
     return false
 }
 
+func checkWinBruteForce(board: Array<Array<String>>) -> Bool{
+    let board: Array<Array<String>> = board
+    // This Function will just go through all 8 possible win scenarios to determine if there is a winner
+    if board[0][0] == board[0][1] && board[0][1] == board[0][2] && board[0][0] != "-" {
+        // XXX
+        // ---
+        // ---
+        return true
+    } else if board[1][0] == board[1][1] && board[1][1] == board[1][2] && board[1][0] != "-" {
+        // ---
+        // xxx
+        // ---
+        return true
+    } else if board[2][0] == board[2][1] && board[2][1] == board[2][2] && board[2][0] != "-" {
+        // ---
+        // ---
+        // XXX
+        return true
+    } else if board[0][0] == board[1][0] && board[1][0] == board[2][0] && board[0][0] != "-" {
+        // X--
+        // X--
+        // X--
+        return true
+    } else if board[0][1] == board[1][1] && board[1][1] == board[2][1] && board[0][1] != "-" {
+        // -X-
+        // -X-
+        // -X-
+        return true
+    } else if board[0][2] == board[1][2] && board[1][2] == board[2][2] && board[0][2] != "-" {
+        // --X
+        // --X
+        // --X
+        return true
+    } else if board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != "-" {
+        // X--
+        // -X-
+        // --X
+        return true
+    } else if board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] != "-" {
+        // --X
+        // -X-
+        // X--
+        return true
+    } else {
+        return false
+    }
+}
+
+func checkWinHalfOptimized(board: Array<Array<String>>) -> Bool{
+    let board: Array<Array<String>> = board
+    // This function will check squares 2, 4, 5, 6, and 8
+    // 1 2 3
+    // 4 5 6         If any of these squares are not empty (not equal to '-')
+    // 7 8 9         then win conditions associated with that square are checked
+
+    if board[0][1] != "-" {
+        if board[0][0] == board[0][1] && board[0][1] == board[0][2] {
+            // XXX
+            // ---
+            // ---
+            return true
+        } else if  board[0][1] == board[1][1] && board [1][1] == board[2][1] {
+            // -X-
+            // -X-
+            // -X-
+            return true
+        }
+    }
+
+    if board[1][0] != "-" {
+        if board[1][0] == board[1][1] &&  board[1][1] == board[1][2] {
+            // ---
+            // XXX
+            // ---
+            return true
+        } else if board[0][0] == board[1][0] && board[1][0] == board[2][0] {
+            // X--
+            // X--
+            // X--
+            return true
+        }
+    }
+
+    if board[1][1] != "-" {
+        if board[0][0] == board[1][1] && board[1][1] == board[2][2] {
+            // X--
+            // -X-
+            // --X
+            return true
+        } else if board[0][2] == board[1][1] && board[1][1] == board[2][0] {
+            // --X
+            // -X-
+            // X--
+            return true
+        }
+    }
+
+    if board[1][2] != "-" {
+        if board[0][2] == board[1][2] && board[1][2] == board[2][2] {
+            // --X
+            // --X
+            // --X
+            return true
+        }
+    }
+
+    if board[2][1] != "-" {
+        if board[2][0] == board[2][1] && board[2][1] == board[2][2] {
+            // ---
+            // ---
+            // XXX
+            return true
+        }
+    }
+
+    return false
+    
+}
+
+// Let user know how to make their selection
+print("\nEnter you selection in the following manner\n")
+print("1 | 2 | 3")
+print("--|---|--")
+print("4 | 5 | 6")
+print("--|---|--")
+print("7 | 8 | 9\n\n")
+
+// Create Blank board
 var board: [Array] = Array(repeating: Array(repeating: "-", count: 3), count: 3)
 var player: Int = 1
 var numTurns = 0
+
+// Loop for the game
 while(true) {
+    // Print current state of board
     printBoard(board: board)
+
+    // take a turn, and replace old board with updated board
     board = takeTurn(player: player, board: board)
     numTurns += 1
+
+    // Only check if there is a win once 5 turns have been taken,
+    // there are no win conditions that exist before turn 5
     if numTurns >= 5 {
-        if checkWinOptimized(board: board) {
+        if checkWinHalfOptimized(board: board) {
             print("Player \(player) Won!")
             printBoard(board: board)
             break
         }
     }
+
+    // Switch player for next turn
     if player == 1 {
         player = 2
     } else {
